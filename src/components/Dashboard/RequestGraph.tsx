@@ -26,48 +26,28 @@ ChartJS.register(
   Filler
 );
 
-// ----- Hardcoded Listings Data -----
-const mockData = [
-  {
-    id: "listing_001",
-    title: "Toyota Camry 2022",
-    createdAt: "2025-01-15T10:30:00Z",
-  },
-  {
-    id: "listing_002",
-    title: "Honda City 2021",
-    createdAt: "2025-01-12T11:00:00Z",
-  },
-  {
-    id: "listing_003",
-    title: "Mahindra Thar 2023",
-    createdAt: "2025-03-18T09:00:00Z",
-  },
-  {
-    id: "listing_004",
-    title: "Hyundai Creta 2020",
-    createdAt: "2025-03-25T15:45:00Z",
-  },
-  {
-    id: "listing_005",
-    title: "Maruti Swift 2022",
-    createdAt: "2025-06-05T08:10:00Z",
-  },
-];
+interface Listing {
+  id: string;
+  title: string;
+  createdAt: string;
+}
 
-// ----- Generate Orders Count Per Month -----
-const getOrderHistoryByMonth = (): number[] => {
+interface Props {
+  listings: Listing[];
+}
+
+const getOrderHistoryByMonth = (listings: Listing[]): number[] => {
   const months = Array(12).fill(0);
-  mockData.forEach((entry) => {
+  listings.forEach((entry) => {
     const date = new Date(entry.createdAt);
-    const month = date.getMonth();
+    const month = date.getMonth(); // 0 = Jan, 11 = Dec
     months[month]++;
   });
   return months;
 };
 
-const RequestGraph: React.FC = () => {
-  const orderHistory: number[] = getOrderHistoryByMonth();
+const RequestGraph: React.FC<Props> = ({ listings }) => {
+  const orderHistory: number[] = getOrderHistoryByMonth(listings);
 
   const salesData = {
     labels: [
@@ -91,7 +71,6 @@ const RequestGraph: React.FC = () => {
       },
     ],
   };
-
 
   const salesOptions: ChartOptions<"line"> = {
     responsive: true,

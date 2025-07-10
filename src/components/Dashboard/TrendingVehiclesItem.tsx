@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -34,23 +34,23 @@ interface TrendingVehiclesItemProps {
 }
 
 const TrendingVehiclesItem: React.FC<TrendingVehiclesItemProps> = ({ listings }) => {
-  const [displayedItems, setDisplayedItems] = useState<Vehicle[]>([]);
   const itemsPerPage = 4;
+  const topListings = [...listings]
+    .sort((a, b) => b.price - a.price)
+    .slice(0, 5);
+
+  const [displayedItems, setDisplayedItems] = useState<Vehicle[]>([]);
 
   useEffect(() => {
-    // Sort top 5 by highest price (as a proxy for demand)
-    const sorted = [...listings].sort((a, b) => b.price - a.price).slice(0, 5);
-    setDisplayedItems(sorted.slice(0, itemsPerPage));
+    setDisplayedItems(topListings.slice(0, itemsPerPage));
   }, [listings]);
 
   const handleScroll = (event: React.UIEvent<HTMLUListElement>) => {
     const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
     if (scrollHeight - scrollTop <= clientHeight + 1) {
       const currentLength = displayedItems.length;
-      if (currentLength < 5) {
-        const moreItems = [...listings]
-          .sort((a, b) => b.price - a.price)
-          .slice(currentLength, currentLength + itemsPerPage);
+      if (currentLength < topListings.length) {
+        const moreItems = topListings.slice(currentLength, currentLength + itemsPerPage);
         setDisplayedItems((prev) => [...prev, ...moreItems]);
       }
     }
@@ -82,7 +82,7 @@ const TrendingVehiclesItem: React.FC<TrendingVehiclesItemProps> = ({ listings })
           <DirectionsCarIcon /> Top Renting Vehicles
         </Typography>
 
-        {listings.length <= 0 ? (
+        {topListings.length === 0 ? (
           <Box sx={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Typography sx={{ color: "#1565C0" }}>No data found</Typography>
           </Box>

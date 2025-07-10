@@ -1,4 +1,3 @@
-// components/ProtectedRoute.tsx
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -31,3 +30,5 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   return <>{children}</>;
 }
+
+

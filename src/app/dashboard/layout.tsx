@@ -17,12 +17,16 @@ import {
   ListItemText,
 } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
+import { Icon } from "@iconify/react";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import { useAppSelector, useAppDispatch } from "@/hooks/reduxHooks";
+import { logout } from '@/store/slices/authSlice';
+import { useRouter } from 'next/navigation';
 
 const drawerWidth = 240;
 const primaryColor = "#8c52ff";
@@ -44,7 +48,7 @@ const Main = styled("main", {
     }),
     marginLeft: 0,
   }),
-  backgroundColor: "#f5f5f5", // consistent light background
+  backgroundColor: "#f5f5f5",
   minHeight: "100vh",
 }));
 
@@ -82,6 +86,9 @@ export default function DashboardLayout({
 }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -91,13 +98,18 @@ export default function DashboardLayout({
     setOpen(false);
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/login");
+  };
+
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
 
-      {/* Top Navbar */}
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -110,10 +122,12 @@ export default function DashboardLayout({
           <Typography variant="h6" noWrap component="div">
             Admin Dashboard
           </Typography>
+          <IconButton color="inherit">
+            <Icon icon="mdi:account-circle" width="30" height="30" />
+          </IconButton>
         </Toolbar>
       </AppBar>
 
-      {/* Side Drawer */}
       <Drawer
         sx={{
           width: drawerWidth,
@@ -123,69 +137,74 @@ export default function DashboardLayout({
             boxSizing: "border-box",
             backgroundColor: primaryColor,
             color: "#fff",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
           },
         }}
         variant="persistent"
         anchor="left"
         open={open}
       >
-
-        {/* Drawer close button */}
         <DrawerHeader>
           <img
-            src="/images/logo.png"
+            src="/images/logo2.png"
             alt="Logo"
             style={{
-              height: 40,
-              maxWidth: "80%",
+              height: 50,
+              maxWidth: "90%",
               objectFit: "contain",
+              marginRight: "4rem"
             }}
           />
           <IconButton sx={{ color: "#fff" }} onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
 
-        <Divider sx={{ backgroundColor: "#ffffff33" }} />
+        <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <Box>
+            <Divider sx={{ backgroundColor: "#ffffff33" }} />
+            <List>
+              {["Home"].map((text, index) => (
+                <ListItem key={text} disablePadding>
+                  <ListItemButton sx={{ color: "#fff" }}>
+                    <ListItemIcon sx={{ color: "#fff" }}>
+                      {index % 2 === 0 ? (
+                        <Icon icon="material-symbols:home-rounded" width="24" height="24" />
+                      ) : (
+                        <MailIcon />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
 
-        {/* List */}
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton sx={{ color: "#fff" }}>
-                <ListItemIcon sx={{ color: "#fff" }}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-
-        <Divider sx={{ backgroundColor: "#ffffff33" }} />
-
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton sx={{ color: "#fff" }}>
-                <ListItemIcon sx={{ color: "#fff" }}>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+          <Box>
+            <Divider sx={{ backgroundColor: "#ffffff33" }} />
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton sx={{ color: "#fff" }}
+                  onClick={handleLogout}
+                >
+                  <ListItemIcon sx={{ color: "#fff" }}>
+                    <Icon icon="material-symbols:logout-rounded" width="24" height="24" />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Box>
+        </Box>
       </Drawer>
 
-      {/* Main Content */}
+
       <Main open={open}>
         <DrawerHeader />
-        <Box sx={{ px: 0, mx: 0, width: '100%' }}> {/* No padding/margin */}
+        <Box sx={{ px: 0, mx: 0, width: '100%' }}>
           {children}
         </Box>
       </Main>

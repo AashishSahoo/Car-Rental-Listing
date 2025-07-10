@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { Typography, Box, Paper, Fade } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Paper,
+  Fade,
+} from "@mui/material";
 import { PolarArea } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -9,53 +14,23 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  ChartOptions,
 } from "chart.js";
 
-// Register Chart.js modules
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
 
-// ----- Sample listings data -----
-const mockListings = [
-  {
-    id: "listing_001",
-    title: "Toyota Camry 2022",
-    category: "sedan",
-  },
-  {
-    id: "listing_002",
-    title: "Honda City 2021",
-    category: "sedan",
-  },
-  {
-    id: "listing_003",
-    title: "Mahindra Thar 2023",
-    category: "suv",
-  },
-  {
-    id: "listing_004",
-    title: "Hyundai Creta 2020",
-    category: "suv",
-  },
-  {
-    id: "listing_005",
-    title: "Maruti Swift 2022",
-    category: "hatchback",
-  },
-  {
-    id: "listing_006",
-    title: "Jeep Compass",
-    category: "suv",
-  },
-  {
-    id: "listing_007",
-    title: "Tata Nexon",
-    category: "compact suv",
-  },
-];
+type Listing = {
+  id: string;
+  title: string;
+  category: string;
+};
 
-// ----- Count by category and pick top 5 -----
-const getTopCategories = (listings) => {
-  const categoryCount = {};
+interface Props {
+  listings: Listing[];
+}
+
+const getTopCategories = (listings: Listing[]) => {
+  const categoryCount: Record<string, number> = {};
 
   listings.forEach(({ category }) => {
     categoryCount[category] = (categoryCount[category] || 0) + 1;
@@ -71,7 +46,7 @@ const getTopCategories = (listings) => {
   };
 };
 
-const TopCarCategoriesChart = ({ listings = mockListings }) => {
+const TopCarCategoriesChart: React.FC<Props> = ({ listings }) => {
   const { labels, values } = getTopCategories(listings);
 
   const chartData = {
@@ -99,7 +74,7 @@ const TopCarCategoriesChart = ({ listings = mockListings }) => {
     ],
   };
 
-  const chartOptions = {
+  const chartOptions: ChartOptions<"polarArea"> = {
     responsive: true,
     animation: {
       duration: 2000,
@@ -161,14 +136,9 @@ const TopCarCategoriesChart = ({ listings = mockListings }) => {
           borderRadius: 4,
           background: "linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%)",
           width: "100%",
-          minHeight: "400px",
+          minHeight: "500px",
           position: "relative",
           boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
-          transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-          "&:hover": {
-            transform: "translateY(-5px)",
-            boxShadow: "0 12px 48px rgba(0, 0, 0, 0.12)",
-          },
         }}
       >
         <Typography
@@ -181,7 +151,7 @@ const TopCarCategoriesChart = ({ listings = mockListings }) => {
             mb: 3,
           }}
         >
-          Top 5 Car Categories by Listings
+          Most valued Car Categories
         </Typography>
 
         <Box
