@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { data } from "@/utils/mockData";
 
-let listings = [...data];
+const listings = [...data];
 
 export async function GET() {
   return NextResponse.json(listings);

@@ -393,7 +393,6 @@ const RentListingTable = ({ listings }: { listings: RentListing[] }) => {
         open={editDialogOpen}
         onClose={() => setEditDialogOpen(false)}
         listing={selectedListing}
-        dispatch={dispatch}
       />
 
       <Dialog
@@ -470,10 +469,10 @@ interface EditListingDialogProps {
   open: boolean;
   onClose: () => void;
   listing: RentListing | null;
-  dispatch: any;
 }
 
-const EditListingDialog: React.FC<EditListingDialogProps> = ({ open, onClose, listing, dispatch }) => {
+const EditListingDialog: React.FC<EditListingDialogProps> = ({ open, onClose, listing }) => {
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     title: "",
     description: "",

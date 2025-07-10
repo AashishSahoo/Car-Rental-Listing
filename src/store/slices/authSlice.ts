@@ -1,9 +1,7 @@
 "use client";
 
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { mockUsers } from "@/utils/userData";
-import { stat } from "fs";
-import build from "next/dist/build";
 
 interface AuthSlice {
   user: null | {
@@ -22,11 +20,8 @@ const initialState: AuthSlice = {
 };
 
 export const loginUser = createAsyncThunk(
-  `auth/loginUser`,
-  async (
-    { email, password }: { email: string; password: string },
-    thunkAPI
-  ) => {
+  "auth/loginUser",
+  async ({ email, password }: { email: string; password: string }) => {
     const user = mockUsers.find(
       (user) => user.email === email && user.password === password
     );
@@ -34,6 +29,7 @@ export const loginUser = createAsyncThunk(
     if (!user) {
       throw new Error("Invalid credentials!");
     }
+
     return {
       id: user.id,
       name: user.name,

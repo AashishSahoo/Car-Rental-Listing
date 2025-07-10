@@ -14,8 +14,8 @@ export async function POST(req: NextRequest) {
       { status: 401 }
     );
   }
-
-  const { password: _, ...userData } = user;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password: _password, ...userData } = user;
 
   return NextResponse.json(userData, { status: 200 });
 }

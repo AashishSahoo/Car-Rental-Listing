@@ -1,14 +1,10 @@
-'use client';
-import React, { Children } from 'react';
-import ReduxProvider from './reduxProvider';
+"use client";
 
-const ClientLayout: React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  return (
-    <ReduxProvider>
-      {children}
-    </ReduxProvider>
-  );
+import React from "react";
+import ReduxProvider from "./reduxProvider";
+
+const ClientLayout = ({ children }: { children: React.ReactNode }) => {
+  return <ReduxProvider>{children}</ReduxProvider>;
 };
 
 export default ClientLayout;
-

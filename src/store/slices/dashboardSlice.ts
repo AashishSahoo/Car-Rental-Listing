@@ -1,8 +1,7 @@
-// store/slices/dashboardSlice.ts
 "use client";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface Listing {
   id: string;
@@ -32,65 +31,70 @@ const initialState: DashboardState = {
   error: null,
 };
 
-export const fetchListings = createAsyncThunk(
-  "dashboard/fetchListings",
-  async (_, thunkAPI) => {
-    try {
-      const res = await axios.get<Listing[]>("/api/dashboard");
-      return res.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to fetch listings"
-      );
-    }
+export const fetchListings = createAsyncThunk<
+  Listing[],
+  void,
+  { rejectValue: string }
+>("dashboard/fetchListings", async (_, thunkAPI) => {
+  try {
+    const res = await axios.get<Listing[]>("/api/dashboard");
+    return res.data;
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || "Failed to fetch listings"
+    );
   }
-);
+});
 
-export const updateListingStatus = createAsyncThunk(
+export const updateListingStatus = createAsyncThunk<
+  Listing,
+  {
+    id: string;
+    status: "approved" | "rejected";
+    rejectionReason?: string | null;
+  },
+  { rejectValue: string }
+>(
   "dashboard/updateListingStatus",
-  async (
-    {
-      id,
-      status,
-      rejectionReason,
-    }: {
-      id: string;
-      status: "approved" | "rejected";
-      rejectionReason?: string | null;
-    },
-    thunkAPI
-  ) => {
+  async ({ id, status, rejectionReason }, thunkAPI) => {
     try {
       const updatedData = {
         status,
         ...(status === "rejected" && { rejectionReason }),
       };
-      const res = await axios.put("/api/dashboard", { id, updatedData });
+      const res = await axios.put<{ updatedItem: Listing }>("/api/dashboard", {
+        id,
+        updatedData,
+      });
       return res.data.updatedItem;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const err = error as AxiosError<{ message: string }>;
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to update listing status"
+        err.response?.data?.message || "Failed to update listing status"
       );
     }
   }
 );
 
-export const updateListing = createAsyncThunk(
-  "dashboard/updateListing",
-  async (
-    { id, updatedData }: { id: string; updatedData: Partial<Listing> },
-    thunkAPI
-  ) => {
-    try {
-      const res = await axios.post("/api/dashboard", { id, updatedData });
-      return res.data.updatedItem;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to update listing"
-      );
-    }
+export const updateListing = createAsyncThunk<
+  Listing,
+  { id: string; updatedData: Partial<Listing> },
+  { rejectValue: string }
+>("dashboard/updateListing", async ({ id, updatedData }, thunkAPI) => {
+  try {
+    const res = await axios.post<{ updatedItem: Listing }>("/api/dashboard", {
+      id,
+      updatedData,
+    });
+    return res.data.updatedItem;
+  } catch (error: unknown) {
+    const err = error as AxiosError<{ message: string }>;
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || "Failed to update listing"
+    );
   }
-);
+});
 
 const dashboardSlice = createSlice({
   name: "dashboard",
@@ -108,7 +112,7 @@ const dashboardSlice = createSlice({
       })
       .addCase(fetchListings.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || "Failed to load data";
+        state.error = action.payload || "Failed to load data";
       })
       .addCase(updateListingStatus.fulfilled, (state, action) => {
         const updatedItem = action.payload;
