@@ -1,0 +1,53 @@
+'use client";';
+export const mockUsers = [
+  {
+    id: "user_001",
+    name: "Aarav Sharma",
+    email: "aarav.sharma@example.com",
+    password: "test1234", // plaintext for mocking only
+    address: "Bandra West, Mumbai, Maharashtra",
+    phone: "+91-9876543210",
+    role: "admin",
+    createdAt: "2024-12-01T09:00:00Z",
+  },
+  {
+    id: "user_002",
+    name: "Meera Singh",
+    email: "meera.singh@example.com",
+    password: "demoPass1",
+    address: "Rajouri Garden, Delhi",
+    phone: "+91-9988776655",
+    role: "user",
+    createdAt: "2025-01-05T11:30:00Z",
+  },
+  {
+    id: "user_003",
+    name: "Rohan Verma",
+    email: "rohan.verma@example.com",
+    password: "password123",
+    address: "MG Road, Bangalore, Karnataka",
+    phone: "+91-9090909090",
+    role: "user",
+    createdAt: "2025-01-12T08:45:00Z",
+  },
+  {
+    id: "user_004",
+    name: "Sanya Mehta",
+    email: "sanya.mehta@example.com",
+    password: "sanya@456",
+    address: "Anna Nagar, Chennai, Tamil Nadu",
+    phone: "+91-9871234567",
+    role: "admin",
+    createdAt: "2025-01-10T13:20:00Z",
+  },
+  {
+    id: "user_005",
+    name: "Kabir Kapoor",
+    email: "kabir.kapoor@example.com",
+    password: "kapoor99",
+    address: "Salt Lake, Kolkata, West Bengal",
+    phone: "+91-9012345678",
+    role: "user",
+    createdAt: "2025-01-15T10:10:00Z",
+  },
+];
