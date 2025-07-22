@@ -160,8 +160,8 @@ const RentListingTable = ({ listings }: { listings: RentListing[] }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Customer</TableCell>
-              <TableCell>CID</TableCell>
+              <TableCell>Customer Name</TableCell>
+              <TableCell>ID</TableCell>
               <TableCell>Vehicle</TableCell>
               <TableCell>₹/day</TableCell>
               <TableCell>Status</TableCell>
@@ -195,7 +195,7 @@ const RentListingTable = ({ listings }: { listings: RentListing[] }) => {
                             }}
                             disabled={row.status !== "pending" || actionLoading === row.id}
                           >
-                            {actionLoading === row.id ? <CircularProgress size={20} /> : <CheckCircle />}
+                            <CheckCircle />
                           </IconButton>
                         </span>
                       </Tooltip>
@@ -209,7 +209,7 @@ const RentListingTable = ({ listings }: { listings: RentListing[] }) => {
                             }}
                             disabled={row.status !== "pending" || actionLoading === row.id}
                           >
-                            {actionLoading === row.id ? <CircularProgress size={20} /> : <Cancel />}
+                            <Cancel />
                           </IconButton>
                         </span>
                       </Tooltip>
@@ -332,7 +332,7 @@ const RentListingTable = ({ listings }: { listings: RentListing[] }) => {
                           sx={{
                             pl: 4,
                             borderLeft: "1px solid #eee",
-                            width: "400px",
+                            width: "500px",
                             position: "relative",
                             "&::before": {
                               content: '""',
@@ -348,19 +348,19 @@ const RentListingTable = ({ listings }: { listings: RentListing[] }) => {
                           }}
                         >
                           <Typography gutterBottom sx={{ color: "#B96B1A", fontWeight: "bold", mb: 2 }}>
-                            Contact Details
+                            More Details
                           </Typography>
                           <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
                             <Typography variant="body2" color="textSecondary">
-                              Description: {row.description}
+                              <strong>Description</strong>: {row.description}
                             </Typography>
 
                             <Typography variant="body2" color="textSecondary">
-                              Location: {row.location}
+                              <strong>Location</strong>: {row.location}
                             </Typography>
 
                             <Typography variant="body2" color="textSecondary">
-                              Category: {row.category}
+                              <strong>Category</strong>: {row.category}
                             </Typography>
 
 

@@ -11,6 +11,7 @@ import {
   Button,
   CircularProgress,
   FormHelperText,
+  Grid,
 } from "@mui/material";
 
 export default function LoginPage() {
@@ -35,28 +36,19 @@ export default function LoginPage() {
   }, [user, router]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        height: "97vh",
-        width: "99vw",
-        overflow: "hidden",
-        bgcolor: "#f9f7fc",
-      }}
-    >
-      <Box
+    <Grid container sx={{ minHeight: "100vh", bgcolor: "#f9f7fc" }}>
+      <Grid
+        item
+        xs={12}
+        md={6}
         sx={{
-          width: { xs: "100%", md: "45%" },
-          minWidth: 320,
-          height: { xs: "auto", md: "100%" },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           background: "linear-gradient(135deg, #d3bfff, #f0e5ff)",
-          boxShadow: { md: "4px 0 20px rgba(0, 0, 0, 0.05)" },
           px: { xs: 2, sm: 4 },
           py: { xs: 6, md: 0 },
+          boxShadow: { md: "4px 0 20px rgba(0, 0, 0, 0.05)" },
         }}
       >
         <Box
@@ -74,7 +66,7 @@ export default function LoginPage() {
             <img
               src="/images/logo.png"
               alt="Logo"
-              style={{ width: 120, height: 120, marginBottom: 0 }}
+              style={{ width: 120, height: 120 }}
             />
             <Typography
               variant="h5"
@@ -152,16 +144,18 @@ export default function LoginPage() {
             </Button>
           </form>
         </Box>
-      </Box>
+      </Grid>
 
-      <Box
+      <Grid
+        item
+        xs={false}
+        md={6}
         sx={{
-          flex: 1,
           display: { xs: "none", md: "block" },
+          position: "relative",
           backgroundImage: "url('/images/image1.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          position: "relative",
         }}
       >
         <Box
@@ -190,7 +184,7 @@ export default function LoginPage() {
             Admin Panel • Simplified & Secure
           </Typography>
         </Box>
-      </Box>
-    </Box>
+      </Grid>
+    </Grid>
   );
 }

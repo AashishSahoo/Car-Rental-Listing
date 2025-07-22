@@ -40,7 +40,7 @@ const getOrderHistoryByMonth = (listings: Listing[]): number[] => {
   const months = Array(12).fill(0);
   listings.forEach((entry) => {
     const date = new Date(entry.createdAt);
-    const month = date.getMonth(); // 0 = Jan, 11 = Dec
+    const month = date.getMonth(); 
     months[month]++;
   });
   return months;
